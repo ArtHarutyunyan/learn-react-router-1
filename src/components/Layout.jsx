@@ -1,16 +1,43 @@
-import { Link, Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
+import { CustomLink } from "./CustomLink";
+
+const setActive = ({ isActive }) => (isActive ? "active-link" : "");
 
 const Layout = () => {
   return (
     <>
       <header>
-        <Link to="/">Home</Link>
-        <Link to="/posts">Blog</Link>
-        <Link to="/about">About</Link>
+        <CustomLink to="/">Home</CustomLink>
+        <CustomLink to="/posts">Blog</CustomLink>
+        <CustomLink to="/about">About</CustomLink>
+        {/* <NavLink
+          to="/"
+          style={({ isActive }) => ({
+            color: isActive ? "var(--color-active)" : "red",
+          })}
+        >
+          Home
+        </NavLink>
+        <NavLink
+          to="/posts"
+          style={({ isActive }) => ({
+            color: isActive ? "var(--color-active)" : "red",
+          })}
+        >
+          Blog
+        </NavLink>
+        <NavLink
+          to="/about"
+          style={({ isActive }) => ({
+            color: isActive ? "var(--color-active)" : "red",
+          })}
+        >
+          About
+        </NavLink> */}
       </header>
-      <mail className="container">
+      <main className="container">
         <Outlet />
-      </mail>
+      </main>
       <footer className="container">2022</footer>
     </>
   );
