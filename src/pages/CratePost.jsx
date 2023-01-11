@@ -1,8 +1,16 @@
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooc/useAuth";
+
 const CreatePost = () => {
+  const { singOut } = useAuth();
+  const navigate = useNavigate();
+
   return (
     <div>
       <h1>Create a post</h1>
-      <p>This is a demo website about React-router-dom library.</p>
+      <button onClick={() => singOut(() => navigate("/", { replace: true }))}>
+        Log Out
+      </button>
     </div>
   );
 };
