@@ -1,16 +1,26 @@
 import { NavLink, Outlet } from "react-router-dom";
 import { CustomLink } from "./CustomLink";
 
-const setActive = ({ isActive }) => (isActive ? "active-link" : "");
+//const setActive = ({ isActive }) => (isActive ? "active-link" : "");
 
 const Layout = () => {
   return (
     <>
       <header>
-        <CustomLink to="/">Home</CustomLink>
-        <CustomLink to="/posts">Blog</CustomLink>
-        <CustomLink to="/about">About</CustomLink>
-        {/* <NavLink
+        <CustomLink to="/">Home </CustomLink>
+        <CustomLink to="/posts"> Blog </CustomLink>
+        <CustomLink to="/about"> About </CustomLink>
+      </header>
+      <main className="container">
+        <Outlet />
+      </main>
+      <footer className="container">@2023 learn react router</footer>
+    </>
+  );
+};
+
+export { Layout };
+/* <NavLink
           to="/"
           style={({ isActive }) => ({
             color: isActive ? "var(--color-active)" : "red",
@@ -33,14 +43,4 @@ const Layout = () => {
           })}
         >
           About
-        </NavLink> */}
-      </header>
-      <main className="container">
-        <Outlet />
-      </main>
-      <footer className="container">2022</footer>
-    </>
-  );
-};
-
-export { Layout };
+        </NavLink> */

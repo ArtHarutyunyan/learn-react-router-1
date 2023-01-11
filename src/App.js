@@ -14,6 +14,9 @@ import {
   Link,
 } from "react-router-dom";
 import { Layout } from "./components/Layout";
+import { SinglePage } from "./components/SinglePage";
+import { CreatePost } from "./pages/CratePost";
+import { EditPost } from "./pages/EditPost";
 
 function App() {
   return (
@@ -23,6 +26,9 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="about" element={<AboutPage />} />
           <Route path="posts" element={<BlogPage />} />
+          <Route path="posts/:id" element={<SinglePage />} />
+          <Route path="posts/:id/edit" element={<EditPost />} />
+          <Route path="posts/new" element={<CreatePost />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
