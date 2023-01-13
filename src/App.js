@@ -3,53 +3,90 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { HomePage } from "./pages/HomePage";
 import { AboutPage } from "./pages/AboutPage";
-import { BlogPage } from "./pages/BlogPage";
+import { blogLoader, BlogPage } from "./pages/BlogPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import {
   createBrowserRouter,
   RouterProvider,
-  Routes,
+  //Routes,
   Route,
   Link,
   Navigate,
+  createRoutesFromElements,
 } from "react-router-dom";
 import { Layout } from "./components/Layout";
-import { SinglePage } from "./components/SinglePage";
+import { postLoader, SinglePage } from "./components/SinglePage";
 import { CreatePost } from "./pages/CratePost";
 import { EditPost } from "./pages/EditPost";
 import { LoginPage } from "./pages/LoginPage";
 import { RequireAuth } from "./hoc/RequireAuth";
 import { AuthProvider } from "./hoc/AuthProvider";
 
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<Layout />}>
+      <Route index element={<HomePage />} />
+      <Route path="about" element={<AboutPage />}>
+        <Route path="contacts" element={<p>Our contact</p>} />
+        <Route path="team" element={<p>Our team</p>} />
+      </Route>
+      <Route path="about-us" element={<Navigate to="/about" replace />} />
+      <Route path="posts" element={<BlogPage />} loader={blogLoader} />
+      <Route path="posts/:id" element={<SinglePage />} loader={postLoader} />
+      <Route path="posts/:id/edit" element={<EditPost />} />
+      <Route
+        path="posts/new"
+        element={
+          <RequireAuth>
+            <CreatePost />
+          </RequireAuth>
+        }
+      />
+      <Route path="login" element={<LoginPage />} />
+      <Route path="*" element={<NotFoundPage />} />
+    </Route>
+  )
+);
+
 function App() {
   return (
     <AuthProvider>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<HomePage />} />
-          <Route path="about" element={<AboutPage />}>
-            <Route path="contacts" element={<p>Our contact</p>} />
-            <Route path="team" element={<p>Our team</p>} />
-          </Route>
-          <Route path="about-us" element={<Navigate to="/about" replace />} />
-          <Route path="posts" element={<BlogPage />} />
-          <Route path="posts/:id" element={<SinglePage />} />
-          <Route path="posts/:id/edit" element={<EditPost />} />
-          <Route
-            path="posts/new"
-            element={
-              <RequireAuth>
-                <CreatePost />
-              </RequireAuth>
-            }
-          />
-          <Route path="login" element={<LoginPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Route>
-      </Routes>
+      <RouterProvider router={router} />
     </AuthProvider>
   );
 }
+
+export default App;
+
+// function App() {
+//   return (
+//     <AuthProvider>
+//       <Routes>
+//         <Route path="/" element={<Layout />}>
+//           <Route index element={<HomePage />} />
+//           <Route path="about" element={<AboutPage />}>
+//             <Route path="contacts" element={<p>Our contact</p>} />
+//             <Route path="team" element={<p>Our team</p>} />
+//           </Route>
+//           <Route path="about-us" element={<Navigate to="/about" replace />} />
+//           <Route path="posts" element={<BlogPage />} />
+//           <Route path="posts/:id" element={<SinglePage />} />
+//           <Route path="posts/:id/edit" element={<EditPost />} />
+//           <Route
+//             path="posts/new"
+//             element={
+//               <RequireAuth>
+//                 <CreatePost />
+//               </RequireAuth>
+//             }
+//           />
+//           <Route path="login" element={<LoginPage />} />
+//           <Route path="*" element={<NotFoundPage />} />
+//         </Route>
+//       </Routes>
+//     </AuthProvider>
+//   );
+// }
 
 // const router = createBrowserRouter([
 //   {
@@ -134,5 +171,3 @@ function App() {
 // function App() {
 //   return <RouterProvider router={router} />;
 // }
-
-export default App;
