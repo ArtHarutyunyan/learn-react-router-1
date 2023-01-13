@@ -1,9 +1,16 @@
-import { useState, useEffect } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+//import { useState, useEffect } from "react";
+import { Suspense } from "react";
+import {
+  Await,
+  defer,
+  Link,
+  useLoaderData,
+  useSearchParams,
+} from "react-router-dom";
 import { BlogFilter } from "../components/BlogFilter";
 
 const BlogPage = () => {
-  const [posts, setPosts] = useState([]);
+  const { posts } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const postQuery = searchParams.get("post") || "";
@@ -11,11 +18,6 @@ const BlogPage = () => {
   const latest = searchParams.has("latest");
   const startsFrom = latest ? 80 : 1;
 
-  useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/posts")
-      .then((res) => res.json())
-      .then((data) => setPosts(data));
-  }, []);
   return (
     <div>
       <h1>Blog News</h1>
@@ -25,17 +27,38 @@ const BlogPage = () => {
         setSearchParams={setSearchParams}
       />
       <Link to="/posts/new">Add new post</Link>
-      {posts
-        .filter(
-          (post) => post.title.includes(postQuery) && post.id >= startsFrom
-        )
-        .map((post) => (
-          <Link key={post.id} to={`/posts/${post.id}`}>
-            <li>{post.title}</li>
-          </Link>
-        ))}
+      <Suspense fallback={<h2>Loading...</h2>}>
+        <Await resolve={posts}>
+          {(resolvedPosts) =>
+            resolvedPosts
+              .filter(
+                (post) =>
+                  post.title.includes(postQuery) && post.id >= startsFrom
+              )
+              .map((post) => (
+                <Link key={post.id} to={`/posts/${post.id}`}>
+                  <li>{post.title}</li>
+                </Link>
+              ))
+          }
+        </Await>
+      </Suspense>
     </div>
   );
 };
 
-export { BlogPage };
+async function getPosts() {
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+  return res.json();
+}
+
+const blogLoader = async ({ request, params }) => {
+  // return {
+  //   posts: getPosts(),
+  // };
+  return defer({
+    posts: getPosts(),
+  });
+};
+
+export { BlogPage, blogLoader };
