@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import {
   Await,
   defer,
+  json,
   Link,
   useLoaderData,
   useSearchParams,
@@ -48,17 +49,30 @@ const BlogPage = () => {
 };
 
 async function getPosts() {
-  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+  const res = await fetch("https://jsonplaceholder.typicode.com/postss");
+
+  // if (!res.ok) {
+  //   throw new Response("", { status: res.status, statusText: "Not found!!!" });
+  // }
+
   return res.json();
 }
 
 const blogLoader = async ({ request, params }) => {
-  // return {
+  const posts = getPosts();
+
+  if (!posts.length) {
+    throw json(
+      { message: "Not found!!!", reason: "Wrong url" },
+      { status: 404 }
+    );
+  }
+  return {
+    posts,
+  };
+  // return defer({
   //   posts: getPosts(),
-  // };
-  return defer({
-    posts: getPosts(),
-  });
+  // });
 };
 
 export { BlogPage, blogLoader };

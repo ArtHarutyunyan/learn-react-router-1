@@ -21,6 +21,7 @@ import { EditPost } from "./pages/EditPost";
 import { LoginPage } from "./pages/LoginPage";
 import { RequireAuth } from "./hoc/RequireAuth";
 import { AuthProvider } from "./hoc/AuthProvider";
+import ErrorPage from "./pages/ErrorPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -31,7 +32,12 @@ const router = createBrowserRouter(
         <Route path="team" element={<p>Our team</p>} />
       </Route>
       <Route path="about-us" element={<Navigate to="/about" replace />} />
-      <Route path="posts" element={<BlogPage />} loader={blogLoader} />
+      <Route
+        path="posts"
+        element={<BlogPage />}
+        loader={blogLoader}
+        errorElement={<ErrorPage />}
+      />
       <Route path="posts/:id" element={<SinglePage />} loader={postLoader} />
       <Route path="posts/:id/edit" element={<EditPost />} />
       <Route
