@@ -16,8 +16,8 @@ import {
 } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import { postLoader, SinglePage } from "./components/SinglePage";
-import { CreatePost } from "./pages/CratePost";
-import { EditPost } from "./pages/EditPost";
+import { CreatePost, createPostAction } from "./pages/CreatePost";
+import { EditPost, updatePostAction } from "./pages/EditPost";
 import { LoginPage } from "./pages/LoginPage";
 import { RequireAuth } from "./hoc/RequireAuth";
 import { AuthProvider } from "./hoc/AuthProvider";
@@ -39,7 +39,12 @@ const router = createBrowserRouter(
         errorElement={<ErrorPage />}
       />
       <Route path="posts/:id" element={<SinglePage />} loader={postLoader} />
-      <Route path="posts/:id/edit" element={<EditPost />} />
+      <Route
+        path="posts/:id/edit"
+        element={<EditPost />}
+        loader={postLoader}
+        action={updatePostAction}
+      />
       <Route
         path="posts/new"
         element={
@@ -47,6 +52,7 @@ const router = createBrowserRouter(
             <CreatePost />
           </RequireAuth>
         }
+        action={createPostAction}
       />
       <Route path="login" element={<LoginPage />} />
       <Route path="*" element={<NotFoundPage />} />

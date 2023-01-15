@@ -49,19 +49,20 @@ const BlogPage = () => {
 };
 
 async function getPosts() {
-  const res = await fetch("https://jsonplaceholder.typicode.com/postss");
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
 
   // if (!res.ok) {
   //   throw new Response("", { status: res.status, statusText: "Not found!!!" });
   // }
-
   return res.json();
 }
 
 const blogLoader = async ({ request, params }) => {
   const posts = getPosts();
 
-  if (!posts.length) {
+  console.log(JSON.stringify(posts), "posts");
+
+  if (!posts) {
     throw json(
       { message: "Not found!!!", reason: "Wrong url" },
       { status: 404 }
